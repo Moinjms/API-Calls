@@ -17,8 +17,8 @@ app.post("/", function(req, res) {
   const url = "https://api.openweathermap.org/data/2.5/weather?q=" + city_country + "&appid=dd12d7bc1bd6a3710e3b7cd43ebaeaf2&units=metric";
   let stat = "No Data Received from Server"
   https.get(url, function(response) {
-    console.log(response.statusCode);
-    console.log(req.body.cityName + "," + req.body.countryName);
+    // console.log(response.statusCode);
+    // console.log(req.body.cityName + "," + req.body.countryName);
     if (response.statusCode === 200) {
       response.on("data", function(data) {
         const weatherData = JSON.parse(data)
@@ -33,7 +33,7 @@ app.post("/", function(req, res) {
           res2.on("data", function(data) {
             const joke = JSON.parse(data);
             jokeOutput = "<h4> Programmers Joke : " + joke.joke + "</h4>";
-            console.log("1-----" + jokeOutput);
+            // console.log("1-----" + jokeOutput);
 
             //******************************
             stat = "<img src='http://openweathermap.org/img/wn/" + icon + ".png' alt='icon' height = 120px width = 120px>";
