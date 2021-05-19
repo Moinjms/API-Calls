@@ -7,6 +7,8 @@ const app = express();
 app.use(bodyParser.urlencoded({
   extended: true
 }));
+
+
 app.get("/", function(req, res) {
   res.sendFile(__dirname + "/index.html");
 });
@@ -24,15 +26,25 @@ app.post("/", function(req, res) {
         const weatherDescription = weatherData.weather[0].description;
         const test = weatherData.main.feels_like;
         const icon = weatherData.weather[0].icon;
-        // let jokeOutput = showJoke();
-        stat = "<img src='http://openweathermap.org/img/wn/" + icon + ".png' alt='icon' height = 120px width = 120px>";
-        stat = stat + "<h1 style = 'color:blue;'> Weather in " + city_country + " is " + temp + ", degrees celsius " + "</h1>";
-        stat = stat + weatherDescription + " feels like " + test;
-        stat = stat + "<h3> Temperature MIN : " + weatherData.main.temp_min + " MAX : " + weatherData.main.temp_max + "<br> </h3>";
-        stat = stat + "<hr>";
-        stat = stat
-        res.send(stat);
+        var jokeOutput = "No Jokes";
 
+        const urlJoke = "https://v2.jokeapi.dev/joke/Programming?blacklistFlags=religious,sexist&format=json&type=single";
+        https.get(urlJoke, function(res2, req2) {
+          res2.on("data", function(data) {
+            const joke = JSON.parse(data);
+            jokeOutput = "<h4> Programmers Joke : " + joke.joke + "</h4>";
+            console.log("1-----" + jokeOutput);
+
+            //******************************
+            stat = "<img src='http://openweathermap.org/img/wn/" + icon + ".png' alt='icon' height = 120px width = 120px>";
+            stat = stat + "<h1 style = 'color:blue;'> Weather in " + city_country + " is " + temp + ", degrees celsius " + "</h1>";
+            stat = stat + weatherDescription + " feels like " + test;
+            stat = stat + "<h3> Temperature MIN : " + weatherData.main.temp_min + " MAX : " + weatherData.main.temp_max + "<br> </h3>";
+            stat = stat + "<hr>";
+            stat = stat + jokeOutput;
+            res.send(stat);
+          });
+        });
       });
     } else {
       res.send("Please Enter a valid city/country");
